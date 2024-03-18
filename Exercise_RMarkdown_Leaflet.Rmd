@@ -1,0 +1,44 @@
+---
+title: "R Markdown and Leaflet"
+subtitle: "Peer-graded Assignment"
+author: "Oscar Alonso"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+```{r message=FALSE, warning=FALSE}
+# Cargar librerías
+library(dplyr)
+library(leaflet)
+library(readxl)
+```
+
+We want to represent where the meteorological stations are located in Spain.
+
+We download an Excel where they identify their location in both latitude and longitude.
+
+```{r message=FALSE, warning=FALSE, comment="", fig.align='center'}
+Estaciones <- read_excel("ListadoEstaciones-20190206.xlsx", sheet = "Estaciones")
+head(Estaciones)
+```
+
+Through the "leaflet" library we can see where the weather stations are located.
+
+We group them using "clusterOptions" so that it can be displayed in a more elegant way.
+
+```{r message=FALSE, warning=FALSE, fig.align='center'}
+Estaciones %>% 
+  leaflet() %>% 
+  addTiles() %>% 
+  addMarkers(popup = Estaciones$Población,
+             clusterOptions = markerClusterOptions())
+```
+
